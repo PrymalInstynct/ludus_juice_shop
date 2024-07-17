@@ -1,0 +1,23 @@
+---
+- name: Install dependencies
+  ansible.builtin.package:
+    name:
+      - nodejs
+      - npm
+    state: present
+
+- name: Git Clone Juice Shop
+  ansible.builtin.git:
+    repo: https://github.com/juice-shop/juice-shop
+    dest: /opt/juice-shop
+    depth: 1
+    version: master
+  
+- name: Install Juice Shop
+  community.general.npm:
+    path: /opt/juice-shop
+
+- name: Launch Juice Shop
+  ansible.builtin.command:
+    cmd: npm start
+    chdir: /opt/juice-shop

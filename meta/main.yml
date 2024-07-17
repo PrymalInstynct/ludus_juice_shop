@@ -1,0 +1,28 @@
+---
+dependencies: []
+
+galaxy_info:
+  role_name: ludus_juice_shop
+  author: PrymalInstynct
+  description: An Ansible Role that will deploy the OWASP Juice Shop Vulnerable Web Application using NPM
+  company: ''
+  license: GPLv3
+  min_ansible_version: "2.10"
+  platforms:
+    - name: EL
+      versions:
+        - "all"
+    - name: Fedora
+      versions:
+        - "all"
+    - name: Debian
+      versions:
+        - "all"
+    - name: Ubuntu
+      versions:
+        - "all"
+  galaxy_tags:
+    - linux
+
+collections:
+  - community.general
