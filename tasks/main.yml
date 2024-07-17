@@ -4,7 +4,10 @@
     name:
       - nodejs
       - npm
+      - git
+      - ca-certificates
     state: present
+  become: true
 
 - name: Git Clone Juice Shop
   ansible.builtin.git:
@@ -12,12 +15,41 @@
     dest: /opt/juice-shop
     depth: 1
     version: master
+  become: true
+  register: clone_status
   
 - name: Install Juice Shop
   community.general.npm:
     path: /opt/juice-shop
+  become: true
+  when: clone_status is changed
+
+- name: Create Service File
+  ansible.builtin.copy:
+    content: |
+      [Unit]
+      Description="OWASP Juice Shop"
+
+      [Service]
+      Type=simple
+      Restart=always
+      User=root
+      Group=root
+      WorkingDirectory=/opt/juice-shop
+      ExecStart=/usr/bin/npm start
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/juiceshop.service
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
 
 - name: Launch Juice Shop
-  ansible.builtin.command:
-    cmd: npm start
-    chdir: /opt/juice-shop
+  ansible.builtin.systemd_service:
+    name: juiceshop.service
+    state: started
+    enabled: true
+    daemon_reload: true
+  become: true
