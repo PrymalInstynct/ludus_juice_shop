@@ -1,0 +1,17 @@
+[Unit]
+Description="OWASP Juice Shop"
+
+[Service]
+Type=simple
+Restart=always
+User=root
+Group=root
+WorkingDirectory=/opt/juice-shop
+{% if ludus_juice_shop_ctf %}
+ENVIRONMENT="NODE_ENV=ctf"
+{% endif %}
+ExecStart= /usr/bin/npm start
+
+
+[Install]
+WantedBy=multi-user.target
